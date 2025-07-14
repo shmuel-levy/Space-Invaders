@@ -13,7 +13,7 @@ A modern, responsive implementation of the classic Space Invaders arcade game bu
 
 <img width="955" height="439" alt="Gmae space invaders" src="https://github.com/user-attachments/assets/1fea476a-2fb5-435b-b966-0e3d18216bdf" />
 <img width="959" height="442" alt="Space Invaders homepage" src="https://github.com/user-attachments/assets/9c31520b-3633-41dd-bd9c-3c621a3ca27a" />
-[Play the Game](https://your-username.github.io/space-invaders)
+[Play the Game](https://shmuel-levy.github.io/space-invaders)
 
 ## ✨ Features
 
