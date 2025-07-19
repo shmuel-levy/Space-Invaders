@@ -1,7 +1,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Space Invaders</title>
     <link rel="stylesheet" href="css/main.css" />
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -64,6 +67,23 @@
                     </div>
                 </div>
             </div>
+            <div class="mobile-controls-section">
+                <h3>Mobile Controls</h3>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <div class="control-key">Touch & Drag</div>
+                        <div class="control-desc">Move ship by touching and dragging on the screen</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">Fire Button</div>
+                        <div class="control-desc">Tap the fire button to shoot regular laser</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">Special Buttons</div>
+                        <div class="control-desc">Use N and X buttons for special attacks</div>
+                    </div>
+                </div>
+            </div>
             <div class="game-objectives">
                 <h3>Game Objectives</h3>
                 <ul>
@@ -89,8 +109,25 @@
     <table class="board-container" style="display: none;">
       <tbody class="board"></tbody>
     </table>
+    
+    <div class="mobile-controls" style="display: none;">
+        <div class="mobile-controls-container">
+            <div class="mobile-left-controls">
+                <button class="mobile-btn left-btn" ontouchstart="handleTouchStart('left')" ontouchend="handleTouchEnd('left')">←</button>
+            </div>
+            <div class="mobile-center-controls">
+                <button class="mobile-btn fire-btn" ontouchstart="handleTouchStart('fire')" ontouchend="handleTouchEnd('fire')">FIRE</button>
+            </div>
+            <div class="mobile-right-controls">
+                <button class="mobile-btn right-btn" ontouchstart="handleTouchStart('right')" ontouchend="handleTouchEnd('right')">→</button>
+                <button class="mobile-btn n-btn" ontouchstart="handleTouchStart('n')" ontouchend="handleTouchEnd('n')">N</button>
+                <button class="mobile-btn x-btn" ontouchstart="handleTouchStart('x')" ontouchend="handleTouchEnd('x')">X</button>
+            </div>
+        </div>
+    </div>
+    
     <footer>
-      👾  Copyrights to Shmuel Levy  👾 
+      Copyrights to Shmuel Levy
   </footer>
     <script src="js/utils.js"></script>
     <script src="js/player.js"></script>
