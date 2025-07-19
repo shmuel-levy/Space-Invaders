@@ -3,21 +3,113 @@
 var gGame
 var gBoard
 var gInvadersInterval
+var gIsMobile = false
+var gTouchStartX = 0
+var gTouchStartY = 0
+var gIsDragging = false
 var shootSound = new Audio('Sound/blaster-2-81267.mp3')
 var backgroundMusicMenu = new Audio('Sound/spaceship-cruising-ufo-7176.mp3')
 var backgroundMusic = new Audio("Sound/invasion-march-star-wars-style-cinematic-music-219585.mp3")
 
 function init() {
+    detectMobile()
+    setupTouchControls()
     showMenu()
     if (backgroundMusicMenu) {
         backgroundMusicMenu.play().catch(e => console.log('Menu music failed to play:', e))
     }
 }
 
+function detectMobile() {
+    gIsMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                window.innerWidth <= 768
+}
+
+function setupTouchControls() {
+    if (!gIsMobile) return
+    
+    const boardContainer = document.querySelector('.board-container')
+    if (boardContainer) {
+        boardContainer.addEventListener('touchstart', handleTouchStart, { passive: false })
+        boardContainer.addEventListener('touchmove', handleTouchMove, { passive: false })
+        boardContainer.addEventListener('touchend', handleTouchEnd, { passive: false })
+    }
+}
+
+function handleTouchStart(event) {
+    if (event.target.classList.contains('mobile-btn')) return
+    
+    event.preventDefault()
+    const touch = event.touches[0]
+    gTouchStartX = touch.clientX
+    gTouchStartY = touch.clientY
+    gIsDragging = true
+}
+
+function handleTouchMove(event) {
+    if (!gIsDragging || event.target.classList.contains('mobile-btn')) return
+    
+    event.preventDefault()
+    const touch = event.touches[0]
+    const deltaX = touch.clientX - gTouchStartX
+    const deltaY = touch.clientY - gTouchStartY
+    
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+        if (deltaX > 0) {
+            moveHero({ key: 'ArrowRight' })
+        } else {
+            moveHero({ key: 'ArrowLeft' })
+        }
+        gTouchStartX = touch.clientX
+    }
+}
+
+function handleTouchEnd(event) {
+    if (event.target.classList.contains('mobile-btn')) return
+    
+    gIsDragging = false
+}
+
+function handleTouchStart(action) {
+    if (!gGame || !gGame.isOn) return
+    
+    switch(action) {
+        case 'left':
+            moveHero({ key: 'ArrowLeft' })
+            break
+        case 'right':
+            moveHero({ key: 'ArrowRight' })
+            break
+        case 'fire':
+            if (!gHero.isShoot) {
+                shoot(gHero.pos)
+            }
+            break
+        case 'n':
+            if (!gHero.isShoot && gHero.neighborShotsLeft > 0) {
+                shootWithNeighbors(gHero.pos)
+            }
+            break
+        case 'x':
+            if (gHero.superAttacksLeft > 0) {
+                activateSuperMode()
+            }
+            break
+    }
+}
+
+function handleTouchEnd(action) {
+    // Touch end handling for continuous actions if needed
+}
+
 function startGame() {
     document.querySelector('.menu').style.display = 'none'
     document.querySelector('.board-container').style.display = 'table'
     document.querySelector('.headers').style.display = 'block'
+    
+    if (gIsMobile) {
+        document.querySelector('.mobile-controls').style.display = 'block'
+    }
     
     if (backgroundMusicMenu) {
         backgroundMusicMenu.pause()
@@ -172,10 +264,12 @@ function showMenu() {
     const menu = document.querySelector('.menu')
     const boardContainer = document.querySelector('.board-container')
     const headers = document.querySelector('.headers')
+    const mobileControls = document.querySelector('.mobile-controls')
     
     if (menu) menu.style.display = 'block'
     if (boardContainer) boardContainer.style.display = 'none'
     if (headers) headers.style.display = 'none'
+    if (mobileControls) mobileControls.style.display = 'none'
 }
 
 function checkGameOver() {
