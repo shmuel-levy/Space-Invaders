@@ -8,14 +8,48 @@
     <title>Space Invaders</title>
     <link rel="stylesheet" href="css/main.css" />
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+      .initial-load {
+        display: none !important;
+      }
+      .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #000428, #004e92);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        color: white;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 24px;
+      }
+      .loading-text {
+        text-align: center;
+        animation: pulse 1.5s ease-in-out infinite alternate;
+      }
+      @keyframes pulse {
+        from { opacity: 0.5; }
+        to { opacity: 1; }
+      }
+    </style>
   </head>
   <body onload="init()" onkeyup="moveHero(event)">
-    <div class="menu">
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-text">
+        Loading Space Invaders...
+      </div>
+    </div>
+    
+    <div class="menu initial-load">
       <h1>Welcome to Space Invaders</h1>
       <button class="btn" onclick="startGame()">Start Game</button>
       <button class="btn controls-btn" onclick="showControls()">How to Play</button>
     </div>
-    <div class="headers">
+    <div class="headers initial-load">
       <h1>Space Invaders</h1>
       <h2>Aliens Remaining: <span class="aliens-count">0</span></h2>
       <div class="score">Score: <span class="count-score">0</span></div>
@@ -24,14 +58,14 @@
       <button class="controls-btn-small" onclick="showControls()">?</button>
       <div class="help-text">Press H for help</div>
     </div>
-    <div class="modal" style="display: none;">
+    <div class="modal initial-load" style="display: none;">
         <div class="modal-content">
             <p class="msg"></p>
             <button class="menu-btn" onclick="backToMenu()">Back to Main Menu</button>
             <button class="restart-btn" onclick="restartGame()">Restart</button>
         </div>
     </div>
-    <div class="controls-modal" style="display: none;">
+    <div class="controls-modal initial-load" style="display: none;">
         <div class="modal-content controls-content">
             <h2>How to Play Space Invaders</h2>
             <div class="controls-section">
@@ -106,11 +140,11 @@
             <button class="restart-btn" onclick="hideControls()">Got it!</button>
         </div>
     </div>
-    <table class="board-container" style="display: none;">
+    <table class="board-container initial-load" style="display: none;">
       <tbody class="board"></tbody>
     </table>
     
-    <div class="mobile-controls" style="display: none;">
+    <div class="mobile-controls initial-load" style="display: none;">
         <div class="mobile-controls-container">
             <div class="mobile-left-controls">
                 <button class="mobile-btn left-btn" ontouchstart="handleTouchStart('left')" ontouchend="handleTouchEnd('left')">←</button>
@@ -126,7 +160,7 @@
         </div>
     </div>
     
-    <footer>
+    <footer class="initial-load">
       Copyrights to Shmuel Levy
   </footer>
     <script src="js/utils.js"></script>

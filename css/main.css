@@ -27,6 +27,36 @@ body {
   align-items: center;
 }
 
+.initial-load {
+  display: none !important;
+}
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #000428, #004e92);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 24px;
+}
+
+.loading-text {
+  text-align: center;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
 .game-container {
   display: flex;
   flex-direction: column;
@@ -532,14 +562,14 @@ footer {
   
   .neighbor-shots {
     right: 10px;
-    bottom: 70px;
+    top: 60px;
     font-size: 14px;
     padding: 8px;
   }
   
   .super-attacks {
     right: 10px;
-    bottom: 10px;
+    top: 120px;
     font-size: 14px;
     padding: 8px;
   }
@@ -553,7 +583,7 @@ footer {
   
   .help-text {
     right: 10px;
-    top: 50px;
+    top: 180px;
     font-size: 10px;
   }
   
@@ -617,6 +647,33 @@ footer {
     font-size: 12px;
   }
   
+  .neighbor-shots {
+    right: 5px;
+    top: 50px;
+    font-size: 12px;
+    padding: 6px;
+  }
+  
+  .super-attacks {
+    right: 5px;
+    top: 100px;
+    font-size: 12px;
+    padding: 6px;
+  }
+  
+  .score {
+    left: 5px;
+    top: 5px;
+    font-size: 14px;
+    padding: 6px;
+  }
+  
+  .help-text {
+    right: 5px;
+    top: 150px;
+    font-size: 9px;
+  }
+  
   .mobile-btn {
     padding: 10px 14px;
     font-size: 14px;
@@ -671,6 +728,29 @@ footer {
   .headers h2 {
     font-size: 12px;
     margin: 2px 0;
+  }
+  
+  .neighbor-shots {
+    top: 40px;
+    font-size: 10px;
+    padding: 4px;
+  }
+  
+  .super-attacks {
+    top: 80px;
+    font-size: 10px;
+    padding: 4px;
+  }
+  
+  .score {
+    top: 5px;
+    font-size: 12px;
+    padding: 4px;
+  }
+  
+  .help-text {
+    top: 120px;
+    font-size: 8px;
   }
 }
 

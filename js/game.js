@@ -14,10 +14,26 @@ var backgroundMusic = new Audio("Sound/invasion-march-star-wars-style-cinematic-
 function init() {
     detectMobile()
     setupTouchControls()
-    showMenu()
-    if (backgroundMusicMenu) {
-        backgroundMusicMenu.play().catch(e => console.log('Menu music failed to play:', e))
+    
+    setTimeout(() => {
+        hideLoadingScreen()
+        showMenu()
+        if (backgroundMusicMenu) {
+            backgroundMusicMenu.play().catch(e => console.log('Menu music failed to play:', e))
+        }
+    }, 1000)
+}
+
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen')
+    if (loadingScreen) {
+        loadingScreen.style.display = 'none'
     }
+    
+    const initialLoadElements = document.querySelectorAll('.initial-load')
+    initialLoadElements.forEach(element => {
+        element.classList.remove('initial-load')
+    })
 }
 
 function detectMobile() {
