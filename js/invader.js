@@ -14,18 +14,79 @@ function createInvaders(board) {
         }
     }
     updateAliensCount(gGame.alienCount)
+    console.log('Created', gGame.alienCount, 'aliens')
+}
+
+function verifyAlienCount() {
+    let actualCount = 0
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        for (let j = 0; j < BOARD_SIZE; j++) {
+            if (gBoard[i][j] === INVADER) {
+                actualCount++
+            }
+        }
+    }
+    
+    if (actualCount !== gGame.alienCount) {
+        console.log('Alien count mismatch! Expected:', gGame.alienCount, 'Actual:', actualCount)
+        gGame.alienCount = actualCount
+        updateAliensCount(gGame.alienCount)
+    }
+    
+    return actualCount
 }
 
 function handleAlienHit(board, pos) {
-    if (board[pos.i][pos.j] === INVADER) {
-        updateCell(board, pos, SKY)
-        gGame.alienCount--
-        gGame.score += ALIEN_POINTS
-        updateAliensCount(gGame.alienCount)
-        updateScore(gGame.score)
+    if (!isValidPosition(pos)) {
+        console.log('Invalid position:', pos)
+        return
     }
-    if (gGame.alienCount === 1) {
+    
+    if (board[pos.i][pos.j] !== INVADER) {
+        console.log('No alien at position:', pos, 'Content:', board[pos.i][pos.j])
+        return
+    }
+    
+    updateCell(board, pos, SKY)
+    
+    gGame.alienCount--
+    gGame.score += ALIEN_POINTS
+    
+    updateAliensCount(gGame.alienCount)
+    updateScore(gGame.score)
+    
+    console.log('Alien destroyed at', pos, 'Remaining:', gGame.alienCount)
+    
+    verifyAlienCount()
+    
+    if (gGame.alienCount <= 0) {
+        console.log('All aliens destroyed! Game won!')
         gameOver(true)
+        return
+    }
+    
+    updateAlienBoundaries()
+}
+
+function updateAlienBoundaries() {
+    let newTopRow = BOARD_SIZE - 1
+    let newBottomRow = 0
+    let alienFound = false
+    
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        for (let j = 0; j < BOARD_SIZE; j++) {
+            if (gBoard[i][j] === INVADER) {
+                alienFound = true
+                if (i < newTopRow) newTopRow = i
+                if (i > newBottomRow) newBottomRow = i
+            }
+        }
+    }
+    
+    if (alienFound && newTopRow <= newBottomRow) {
+        gAliensTopRow = newTopRow
+        gAliensBottomRow = newBottomRow
+        console.log('Updated alien boundaries:', gAliensTopRow, 'to', gAliensBottomRow)
     }
 }
 
@@ -56,6 +117,7 @@ function shiftBoardDown(board) {
         gameOver(false)
         return
     }
+    
     for (let i = gAliensBottomRow; i >= gAliensTopRow; i--) {
         for (let j = 0; j < BOARD_SIZE; j++) {
             if (board[i][j] === INVADER) {
@@ -67,11 +129,10 @@ function shiftBoardDown(board) {
 
     gAliensTopRow++
     gAliensBottomRow++
-
-    renderBoard(board)
 }
+
 function moveInvaders() {
-    if (gIsAlienFreeze || !gGame.isOn) return
+    if (gIsAlienFreeze || !gGame || !gGame.isOn) return
 
     let isEdgeReached = false
 
@@ -101,5 +162,6 @@ function moveInvaders() {
             shiftBoardLeft(gBoard, gAliensTopRow, gAliensBottomRow)
         }
     }
+    
     checkGameOver()
 }

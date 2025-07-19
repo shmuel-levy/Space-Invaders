@@ -1,13 +1,5 @@
 'use strict'
 
-'use strict'
-
-const CANDY = '🍬'
-const CANDY_POINTS = 50
-const CANDY_DURATION = 5000 
-const CANDY_INTERVAL = 10000 
-const FREEZE_DURATION = 5000 
-
 var gCandyInterval
 var gCandyTimeoutId
 
@@ -16,13 +8,19 @@ function startCandySpawn() {
 }
 
 function stopCandySpawn() {
-    clearInterval(gCandyInterval)
+    if (gCandyInterval) {
+        clearInterval(gCandyInterval)
+        gCandyInterval = null
+    }
     if (gCandyTimeoutId) {
         clearTimeout(gCandyTimeoutId)
+        gCandyTimeoutId = null
     }
 }
 
 function spawnCandy() {
+    if (!gGame || !gGame.isOn) return
+    
     const emptyPositions = getEmptyPositionsInFirstRow(gBoard)
     if (emptyPositions.length === 0) return
 
@@ -36,17 +34,11 @@ function spawnCandy() {
     }, CANDY_DURATION)
 }
 
-function getEmptyPositionsInFirstRow(board) {
-    const emptyPositions = []
-    for (let j = 0; j < board[0].length; j++) {
-        if (board[0][j] === SKY) {
-            emptyPositions.push({ i: 0, j })
-        }
-    }
-    return emptyPositions
-}
-
 function handleCandyHit(pos) {
+    if (!isValidPosition(pos) || gBoard[pos.i][pos.j] !== CANDY) {
+        return
+    }
+    
     updateCell(gBoard, pos, SKY)
     gGame.score += CANDY_POINTS
     updateScore(gGame.score)

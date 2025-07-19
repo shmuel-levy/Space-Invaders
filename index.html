@@ -10,17 +10,80 @@
     <div class="menu">
       <h1>Welcome to Space Invaders</h1>
       <button class="btn" onclick="startGame()">Start Game</button>
+      <button class="btn controls-btn" onclick="showControls()">How to Play</button>
     </div>
     <div class="headers">
       <h1>Space Invaders</h1>
       <h2>Aliens Remaining: <span class="aliens-count">0</span></h2>
       <div class="score">Score: <span class="count-score">0</span></div>
+      <div class="neighbor-shots">Neighbor Shots: 1</div>
       <div class="super-attacks">Super Attacks: 3</div>
+      <button class="controls-btn-small" onclick="showControls()">?</button>
+      <div class="help-text">Press H for help</div>
     </div>
     <div class="modal" style="display: none;">
         <div class="modal-content">
             <p class="msg"></p>
+            <button class="menu-btn" onclick="backToMenu()">Back to Main Menu</button>
             <button class="restart-btn" onclick="restartGame()">Restart</button>
+        </div>
+    </div>
+    <div class="controls-modal" style="display: none;">
+        <div class="modal-content controls-content">
+            <h2>How to Play Space Invaders</h2>
+            <div class="controls-section">
+                <h3>Controls</h3>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <div class="control-key">Left Arrow</div>
+                        <div class="control-desc">Move ship to the left</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">Right Arrow</div>
+                        <div class="control-desc">Move ship to the right</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">Spacebar</div>
+                        <div class="control-desc">Fire regular laser beam</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">N Key</div>
+                        <div class="control-desc">Fire special shot that damages aliens in surrounding cells (1 use per game)</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">X Key</div>
+                        <div class="control-desc">Activate super mode for faster and more powerful shots (3 uses per game)</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">H Key</div>
+                        <div class="control-desc">Show this help screen during gameplay</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">ESC Key</div>
+                        <div class="control-desc">Close help screen during gameplay</div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-objectives">
+                <h3>Game Objectives</h3>
+                <ul>
+                    <li>Destroy all invading aliens before they reach your ship</li>
+                    <li>Collect candy power-ups for 50 bonus points and temporary alien freeze</li>
+                    <li>Use your 3 super attacks strategically for maximum effect</li>
+                    <li>Prevent aliens from reaching the bottom row of the screen</li>
+                    <li>Each alien destroyed gives you 10 points</li>
+                </ul>
+            </div>
+            <div class="game-tips">
+                <h3>Tips for Success</h3>
+                <ul>
+                    <li>Use the N key to clear groups of aliens efficiently</li>
+                    <li>Save super attacks for when aliens are close to your ship</li>
+                    <li>Collect candy power-ups whenever possible to buy time</li>
+                    <li>Watch the alien count - destroy all 24 aliens to win</li>
+                </ul>
+            </div>
+            <button class="restart-btn" onclick="hideControls()">Got it!</button>
         </div>
     </div>
     <table class="board-container" style="display: none;">

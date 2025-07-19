@@ -5,19 +5,26 @@ var gBoard
 var gInvadersInterval
 var shootSound = new Audio('Sound/blaster-2-81267.mp3')
 var backgroundMusicMenu = new Audio('Sound/spaceship-cruising-ufo-7176.mp3')
-var backgroundMusic = new Audio("/Sound/invasion-march-star-wars-style-cinematic-music-219585.mp3")
+var backgroundMusic = new Audio("Sound/invasion-march-star-wars-style-cinematic-music-219585.mp3")
 
 function init() {
     showMenu()
-    backgroundMusicMenu.play()
+    if (backgroundMusicMenu) {
+        backgroundMusicMenu.play().catch(e => console.log('Menu music failed to play:', e))
+    }
 }
 
 function startGame() {
     document.querySelector('.menu').style.display = 'none'
     document.querySelector('.board-container').style.display = 'table'
     document.querySelector('.headers').style.display = 'block'
-    backgroundMusicMenu.pause()
-    backgroundMusic.play()
+    
+    if (backgroundMusicMenu) {
+        backgroundMusicMenu.pause()
+    }
+    if (backgroundMusic) {
+        backgroundMusic.play().catch(e => console.log('Background music failed to play:', e))
+    }
     
     gGame = {
         isOn: true,
@@ -25,6 +32,7 @@ function startGame() {
         alienCount: 0,
         score: 0
     }
+    
     gBoard = buildBoard()
     createInvaders(gBoard)
     createHero(gBoard)
@@ -37,8 +45,9 @@ function startGame() {
     gAlienMoveDirection = 'right'
     gIsAlienFreeze = false
 
-    if (gInvadersInterval)
+    if (gInvadersInterval) {
         clearInterval(gInvadersInterval)
+    }
     gInvadersInterval = setInterval(moveInvaders, ALIEN_SPEED)
 }
 
@@ -65,44 +74,113 @@ function renderBoard(board) {
         strHTML += '</tr>'
     }
     const elContainer = document.querySelector('.board')
-    elContainer.innerHTML = strHTML
+    if (elContainer) {
+        elContainer.innerHTML = strHTML
+    }
 }
 
 function gameOver(isWin) {
     gGame.isOn = false
-    clearInterval(gInvadersInterval)
+    gGame.isVictory = isWin
+    
+    if (gInvadersInterval) {
+        clearInterval(gInvadersInterval)
+        gInvadersInterval = null
+    }
+    
     stopCandySpawn()
-    backgroundMusic.pause()
-    const message = isWin ? "You Won!" : "Game Over!"
+    
+    if (backgroundMusic) {
+        backgroundMusic.pause()
+    }
+    
+    const message = isWin ? "You Won! Congratulations!" : "Game Over! Try again!"
     openModal(message)
 }
+
 function openModal(message) {
-    document.querySelector('.modal').style.display = "block"
-    document.querySelector('.modal .msg').innerText = message
+    const modal = document.querySelector('.modal')
+    const msgElement = document.querySelector('.modal .msg')
+    if (modal && msgElement) {
+        modal.style.display = "block"
+        msgElement.innerText = message
+    }
 }
 
 function closeModal() {
-    document.querySelector('.modal').style.display = "none"
+    const modal = document.querySelector('.modal')
+    if (modal) {
+        modal.style.display = "none"
+    }
+}
+
+function showControls() {
+    const controlsModal = document.querySelector('.controls-modal')
+    if (controlsModal) {
+        controlsModal.style.display = "block"
+    }
+}
+
+function hideControls() {
+    const controlsModal = document.querySelector('.controls-modal')
+    if (controlsModal) {
+        controlsModal.style.display = "none"
+    }
+}
+
+function backToMenu() {
+    closeModal()
+    
+    if (gInvadersInterval) {
+        clearInterval(gInvadersInterval)
+        gInvadersInterval = null
+    }
+    
+    if (gLaserInterval) {
+        clearInterval(gLaserInterval)
+        gLaserInterval = null
+    }
+    
+    stopCandySpawn()
+    
+    if (backgroundMusic) {
+        backgroundMusic.pause()
+    }
+    
+    showMenu()
 }
 
 function restartGame() {
     closeModal()
-    gIsAlienFreeze = true
-    clearInterval(gInvadersInterval)
-    stopCandySpawn()
+    
     gHero.superAttacksLeft = 3
+    gHero.neighborShotsLeft = 1
     gHero.isSuperMode = false
+    gHero.isShoot = false
     updateSuperAttacksDisplay()
+    updateNeighborShotsDisplay()
+    
+    if (gLaserInterval) {
+        clearInterval(gLaserInterval)
+        gLaserInterval = null
+    }
+    
     startGame()
 }
 
 function showMenu() {
-    document.querySelector('.menu').style.display = 'block'
-    document.querySelector('.board-container').style.display = 'none'
-    document.querySelector('.headers').style.display = 'none'
+    const menu = document.querySelector('.menu')
+    const boardContainer = document.querySelector('.board-container')
+    const headers = document.querySelector('.headers')
+    
+    if (menu) menu.style.display = 'block'
+    if (boardContainer) boardContainer.style.display = 'none'
+    if (headers) headers.style.display = 'none'
 }
 
 function checkGameOver() {
+    if (!gGame || !gGame.isOn) return
+    
     const heroRow = gBoard.length - 2
     for (let j = 0; j < BOARD_SIZE; j++) {
         if (gBoard[heroRow][j] === INVADER) {
